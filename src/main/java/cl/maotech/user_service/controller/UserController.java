@@ -63,7 +63,6 @@ public class UserController {
             up_user.setLast_name(user.getLast_name());
             up_user.setEmail(user.getEmail());
             up_user.setStatus(user.getStatus());
-            up_user.setRole_id(user.getRole_id());
 
             userService.save(up_user);
             return ResponseEntity.ok(up_user);
@@ -87,11 +86,11 @@ public class UserController {
     public ResponseEntity<List<User>> findInactives() {
         try {
             List<User> inactives = userService.findByStatusFalse();
-        if (inactives.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(inactives);
-        }
+            if (inactives.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(inactives);
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
