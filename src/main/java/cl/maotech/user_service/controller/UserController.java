@@ -29,18 +29,27 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<User> create(@RequestBody User user) {
-        User newUser = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        try {
+            User newUser = userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<User>> list() {
-        List<User> users = userService.findAll();
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(users);
+        try {
+            List<User> users = userService.findAll();
+            if (users.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(users);
         }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+        
     }
 
     @GetMapping("/{id}/details")
