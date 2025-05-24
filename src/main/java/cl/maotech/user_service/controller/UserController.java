@@ -50,7 +50,7 @@ public class UserController {
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
-                }
+        }
     }
 
     @PutMapping("/{id}/update")
@@ -83,5 +83,27 @@ public class UserController {
         }
     }
     
+    @GetMapping("/inactives")
+    public ResponseEntity<List<User>> findInactives() {
+        try {
+            List<User> inactives = userService.findByStatusFalse();
+        if (inactives.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(inactives);
+        }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
     
+    @DeleteMapping("/inactives/delete")
+    public ResponseEntity<?> deleteAllInactives() {
+        try {
+            userService.deleteStatusFalse();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -32,4 +32,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public List<User> findByStatusFalse(){
+        return userRepository.findByStatusFalse();
+    }
+
+    public void deleteStatusFalse(){
+        List<User> inactives = userRepository.findByStatusFalse();
+        userRepository.deleteAll(inactives);
+    }
 }
