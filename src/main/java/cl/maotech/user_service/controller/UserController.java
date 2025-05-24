@@ -114,4 +114,18 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        try {
+            boolean login = userService.login(user.getEmail(), user.getPassword());
+            if (login) {
+                return ResponseEntity.ok("Logged-In");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong Credentials");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

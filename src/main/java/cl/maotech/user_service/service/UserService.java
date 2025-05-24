@@ -40,4 +40,13 @@ public class UserService {
         List<User> inactives = userRepository.findByStatusFalse();
         userRepository.deleteAll(inactives);
     }
+
+    //Modificar para hashear contraseñas
+    public boolean login(String email, String password){
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        return user.getPassword().equals(password);
+    }
 }

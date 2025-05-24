@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.status = false")
     List<User> findByStatusFalse();
     
+    User findByEmail(String email);
 }
