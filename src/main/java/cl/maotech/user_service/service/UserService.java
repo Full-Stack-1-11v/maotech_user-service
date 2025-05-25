@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cl.maotech.user_service.dto.AuthDTO;
+import cl.maotech.user_service.dto.StatusEditDTO;
 import cl.maotech.user_service.dto.UserDTO;
 import cl.maotech.user_service.dto.UserEditDTO;
+import cl.maotech.user_service.model.Role;
 import cl.maotech.user_service.model.User;
 import cl.maotech.user_service.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -87,9 +90,59 @@ public class UserService {
         editDTO.setEmail(user.getEmail());
         editDTO.setFirstName(user.getFirstName());
         editDTO.setLastName(user.getLastName());
-        editDTO.setStatus(user.getStatus());
-        editDTO.setRole(user.getRole());
 
         return editDTO;
     }
+
+    public User updateFromDto(UserEditDTO dto, User user) {
+        if (dto == null || user == null) {
+            return user;
+        }
+        if (dto.getEmail() != null) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getFirstName() != null) {
+            user.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null) {
+            user.setLastName(dto.getLastName());
+        }
+
+        return user;
+    }
+
+    public User updateStatusDto(StatusEditDTO dto, User user) {
+        if (dto == null || user == null) {
+            return user;
+        }
+        if (dto.getStatus() != null) {
+            user.setStatus(dto.getStatus());
+        }
+
+        return user;
+    }
+
+    public User updateRoleDto(Integer roleId, User user) {
+
+        if (roleId != null) {
+            Role role = new Role();
+            role.setRoleId(roleId);
+            user.setRole(role);       
+        }
+
+        return user;
+    }
+
+    public AuthDTO authDto(User user){
+        if (user == null) {
+            return null;
+        }
+
+        AuthDTO userDTO = new AuthDTO();
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+
+        return userDTO;
+    }
+
 }

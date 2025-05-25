@@ -7,14 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEditDTO {
+public class RoleDTO {
 
-    private Integer userId;
-
-    private String email;
-
-    private String firstName;
-
-    private String lastName;
-
+    private Integer roleId;
+    
 }

@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.maotech.user_service.dto.RoleDTO;
+import cl.maotech.user_service.dto.StatusEditDTO;
 import cl.maotech.user_service.dto.UserDTO;
+import cl.maotech.user_service.dto.UserEditDTO;
 import cl.maotech.user_service.model.User;
 import cl.maotech.user_service.service.UserService;
 
@@ -88,8 +91,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user) {
+    @PutMapping("/{id}/full-update")
+    public ResponseEntity<User> fullUpdate(@PathVariable Integer id, @RequestBody User user) {
         try {
             User up_user = userService.findById(id);
             up_user.setUserId(id);
@@ -106,6 +109,51 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }        
     }
+
+    @PutMapping("/{id}/update")
+    public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody UserEditDTO editDTO) {
+        try {
+            User user = userService.findById(id);
+            User up_user = userService.updateFromDto(editDTO, user);
+
+            userService.save(up_user);
+            return ResponseEntity.ok(up_user);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }        
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<User> deactivateUser(@PathVariable Integer id, @RequestBody StatusEditDTO statusDTO) {
+        try {
+            User user = userService.findById(id);
+            User d_user = userService.updateStatusDto(statusDTO, user);
+
+            userService.save(d_user);
+            return ResponseEntity.ok(d_user);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }        
+    }
+
+    @PutMapping("/{id}/role/edit")
+    public ResponseEntity<User> updateRole(@PathVariable Integer id, @RequestBody RoleDTO roleDTO) {
+        try {
+            User user = userService.findById(id);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            User updatedUser = userService.updateRoleDto(roleDTO.getRoleId(), user);
+            userService.save(updatedUser);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
