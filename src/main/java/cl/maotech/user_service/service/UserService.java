@@ -41,7 +41,7 @@ public class UserService {
         userRepository.deleteAll(inactives);
     }
 
-    //Modificar para hashear contraseñas
+    //Las contraseñas se hashean con el microservicio Auth
     public boolean login(String email, String password){
         User user = userRepository.findByEmail(email);
         if (user == null) {

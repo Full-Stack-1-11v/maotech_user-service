@@ -66,10 +66,10 @@ public class UserController {
     public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user) {
         try {
             User up_user = userService.findById(id);
-            up_user.setUser_id(id);
+            up_user.setUserId(id);
             up_user.setRut(user.getRut());
-            up_user.setFirst_name(user.getFirst_name());
-            up_user.setLast_name(user.getLast_name());
+            up_user.setFirstName(user.getFirstName());
+            up_user.setLastName(user.getLastName());
             up_user.setEmail(user.getEmail());
             up_user.setStatus(user.getStatus());
 
