@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.maotech.user_service.dto.UserDTO;
 import cl.maotech.user_service.model.User;
 import cl.maotech.user_service.service.UserService;
 
@@ -38,6 +39,21 @@ public class UserController {
     }
 
     @GetMapping("/list")
+    public ResponseEntity<List<UserDTO>> listAsDto() {
+        try {
+            List<UserDTO> users = userService.getAllAsDto();
+
+            if (users.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(users);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/list/admin")
     public ResponseEntity<List<User>> list() {
         try {
             List<User> users = userService.findAll();
@@ -49,10 +65,20 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-        
     }
 
     @GetMapping("/{id}/details")
+    public ResponseEntity<UserDTO> findByUserDTO(@PathVariable Integer id) {
+        try {
+            User user = userService.findById(id);
+            UserDTO userDTO = userService.toDto(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/details/admin")
     public ResponseEntity<User> findById(@PathVariable Integer id) {
         try {
             User user = userService.findById(id);
@@ -91,10 +117,24 @@ public class UserController {
         }
     }
     
-    @GetMapping("/inactives")
+    @GetMapping("/inactives/admin")
     public ResponseEntity<List<User>> findInactives() {
         try {
             List<User> inactives = userService.findByStatusFalse();
+            if (inactives.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(inactives);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/inactives")
+    public ResponseEntity<List<UserDTO>> findInactivesDto() {
+        try {
+            List<UserDTO> inactives = userService.findInactivesDto();
             if (inactives.isEmpty()) {
                 return ResponseEntity.noContent().build();
             } else {

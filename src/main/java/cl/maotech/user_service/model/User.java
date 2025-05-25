@@ -42,7 +42,7 @@ public class User {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "roleId")
+    @JoinColumn(name = "role_id")
     private Role role;
 
 }
