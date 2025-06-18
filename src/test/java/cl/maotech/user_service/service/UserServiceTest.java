@@ -77,4 +77,30 @@ public class UserServiceTest {
         userService.delete(userId);
         verify(userRepository).deleteById(userId);
     }
+
+    @Test
+    public void testFindByStatusFalse(){
+        // Given
+        List<User> inactiveUsers = new ArrayList<>();
+        inactiveUsers.add(new User(1, "test@,mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", false, null));
+        // When
+        when(userRepository.findByStatusFalse()).thenReturn(inactiveUsers);
+        // Then
+        List<User> result = userService.findByStatusFalse();
+        assertEquals(inactiveUsers, result);
+        assertEquals(1, result.size());
+        verify(userRepository).findByStatusFalse();
+    }
+
+    @Test
+    public void testDeleteStatusFalse(){
+        // Given
+        List<User> inactiveUsers = new ArrayList<>();
+        inactiveUsers.add(new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", false, null));
+        // When
+        when(userRepository.findByStatusFalse()).thenReturn(inactiveUsers);
+        // Then
+        userService.deleteStatusFalse();
+        verify(userRepository).deleteAll(inactiveUsers);
+    }
 }

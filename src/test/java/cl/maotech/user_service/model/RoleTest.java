@@ -3,11 +3,14 @@ package cl.maotech.user_service.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 public class RoleTest {
 
     @Test
@@ -23,58 +26,82 @@ public class RoleTest {
     }
 
     @Test
+    public void testToString(){
+        // Instanciar
+        Role role = new Role(1, "Administrador");
+        // Verificar toString
+        String expectedString = "Role(roleId=1, roleName=Administrador)";
+        assertEquals(expectedString, role.toString());
+    }
+
+    @Test
     public void testEqualsAndHashCode(){
         // Instanciar
         Role role1 = new Role(1, "Administrador");
         Role role2 = new Role(1, "Administrador");
-        Role role3 = new Role(2, "Instructor");
         // Verificar equals
         assertEquals(role1, role1);
         assertEquals(role1, role2);
-        assertNotEquals(role1, role3);
         assertNotEquals(role1, null);
-        assertNotEquals(role1, "Otro tipo de objeto");
         // Verificar hashCode
         assertEquals(role1.hashCode(), role1.hashCode());
         assertEquals(role1.hashCode(), role2.hashCode());
-        assertNotEquals(role1.hashCode(), role3.hashCode());
     }
 
     @Test
-    public void testEqualsAndHashCodeNullFields(){
+    public void testNotEqualsAndHashCode(){
+        // Instanciar
+        Role role1 = new Role(1, "Administrador");
+        Role role2 = new Role(2, "Instructor");
+        // Verificar equals
+        assertEquals(role1, role1);
+        assertNotEquals(role1, role2);
+        assertNotEquals(role1, null);
+        // Verificar hashCode
+        assertEquals(role1.hashCode(), role1.hashCode());
+        assertNotEquals(role1.hashCode(), role2.hashCode());
+    }
+
+    @Test
+    public void testEqualsAndHashCodeNullValues(){
         // Instanciar
         Role role1 = new Role(null, null);
         Role role2 = new Role(null, null);
         // Verificar equals
         assertEquals(role1, role1);
         assertEquals(role1, role2);
-        //assertEquals(role1, null);
+        assertNotEquals(role1, null);
         // Verificar hashCode
         assertEquals(role1.hashCode(), role1.hashCode());
         assertEquals(role1.hashCode(), role2.hashCode());
     }
 
     @Test
-    public void testEqualsAndHashOneNullField(){
+    public void testNotEqualsAndHashCodeOneNullValue(){
         // Instanciar
         Role role1 = new Role(1, "Administrador");
         Role role2 = new Role(1, null);
         // Verificar equals
         assertEquals(role1, role1);
-        //assertEquals(role1, role2);
+        assertNotEquals(role1, role2);
+        assertNotEquals(role1, null);
         // Verificar hashCode
         assertEquals(role1.hashCode(), role1.hashCode());
-        //assertEquals(role1.hashCode(), role2.hashCode());
+        assertNotEquals(role1.hashCode(), role2.hashCode());
     }
 
     @Test
-    public void testToString(){
+    public void testNotEqualsAndHashCodeDifferentName(){
         // Instanciar
-        Role role = new Role(1, "Administrador");
-        String str = role.toString();
-        // Verificar toString
-        assertNotNull(str);
-        assertTrue(str.contains("Administrador"));
+        Role role1 = new Role(1, "Administrador");
+        Role role2 = new Role(1, "Instructor");
+        // Verificar equals
+        assertEquals(role1, role1);
+        assertNotEquals(role1, role2);
+        assertNotEquals(role1, null);
+        // Verificar hashCode
+        assertEquals(role1.hashCode(), role1.hashCode());
+        assertNotEquals(role1.hashCode(), role2.hashCode());
     }
 
     @Test
