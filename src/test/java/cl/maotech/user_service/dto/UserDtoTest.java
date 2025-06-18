@@ -49,7 +49,7 @@ public class UserDtoTest {
         // Verificar equals
         assertEquals(userDto1, userDto1);
         assertEquals(userDto1, userDto2);
-        assertTrue(!userDto1.equals(null));
+        assertNotEquals(userDto1, null);
         // Verificar hashCode
         assertEquals(userDto1.hashCode(), userDto1.hashCode());
         assertEquals(userDto1.hashCode(), userDto2.hashCode());
