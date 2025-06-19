@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
+import cl.maotech.user_service.dto.AuthDTO;
+import cl.maotech.user_service.dto.StatusEditDTO;
 import cl.maotech.user_service.dto.UserDTO;
 import cl.maotech.user_service.dto.UserEditDTO;
 import cl.maotech.user_service.model.User;
@@ -210,6 +212,118 @@ public class UserServiceTest {
         assertEquals(null, userEditDTO);
     }
 
-    
+    @Test
+    public void testUpdateFromDto(){
+        // Given
+        UserEditDTO userEditDTO = new UserEditDTO(1, "test@mail.com", "Admin1", "Admin1");
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateFromDto(userEditDTO, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+    }
 
+    @Test
+    public void testUpdateFromDtoNullValues(){
+        // Given
+        UserEditDTO userEditDTO = new UserEditDTO(null, null, null, null);
+        User user = new User(null, null, null, null, null, null, null, null);
+        // When
+        User updatedUser = userService.updateFromDto(userEditDTO, user);
+        // Then
+        assertEquals(null, updatedUser.getUserId());
+        assertEquals(null, updatedUser.getEmail());
+        assertEquals(null, updatedUser.getFirstName());
+        assertEquals(null, updatedUser.getLastName());
+    }
+
+    @Test
+    public void testUpdateStatusDto(){
+        // Given
+        StatusEditDTO statusEditDTO = new StatusEditDTO(false);
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateStatusDto(statusEditDTO, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("password123", updatedUser.getPassword());
+        assertEquals("11.111.111-1", updatedUser.getRut());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(false, updatedUser.getStatus());
+        assertEquals(null, updatedUser.getRole());
+    }
+
+    @Test
+    public void testUpdateStatusDtoNullValues(){
+        // Given
+        StatusEditDTO statusEditDTO = null;
+        User user = new User(null, null, null, null, null, null, null, null);
+        // When
+        User updatedUser = userService.updateStatusDto(statusEditDTO, user);
+        // Then
+        assertEquals(null, updatedUser.getUserId());
+        assertEquals(null, updatedUser.getEmail());
+        assertEquals(null, updatedUser.getPassword());
+        assertEquals(null, updatedUser.getRut());
+        assertEquals(null, updatedUser.getFirstName());
+        assertEquals(null, updatedUser.getLastName());
+        assertEquals(null, updatedUser.getStatus());
+        assertEquals(null, updatedUser.getRole());
+    }
+    
+    @Test
+    public void testUpdateRoleDto(){
+        // Given
+        Integer roleId = 1;
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateRoleDto(roleId, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(roleId, updatedUser.getRole().getRoleId());
+    }
+
+    @Test
+    public void testUpdateRoleDtoNullValues(){
+        // Given
+        Integer roleId = null;
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateRoleDto(roleId, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(null, updatedUser.getRole());
+    }
+
+    @Test
+    public void testAuthDto(){
+        // Given
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        AuthDTO authDTO = userService.authDto(user);
+        // Then
+        assertEquals("test@mail.com", authDTO.getEmail());
+        assertEquals("password123", authDTO.getPassword());
+    }
+
+    @Test
+    public void testAuthDtoNullUser(){
+        // Given
+        User user = null;
+        // When
+        AuthDTO authDTO = userService.authDto(user);
+        // Then
+        assertEquals(null, authDTO);
+    }
 }
