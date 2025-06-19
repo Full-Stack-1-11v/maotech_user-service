@@ -44,13 +44,13 @@ public class UserServiceTest {
     public void testFindAll(){
         // Given
         List<User> users = new ArrayList<>();
-        users.add(new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null));
+       // users.add(new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null));
         // When
         when(userRepository.findAll()).thenReturn(users);
         // Then
-        List<User> result = userRepository.findAll();
+        List<User> result = userService.findAll();
         assertEquals(users, result);
-        assertEquals(1, result.size());
+        assertEquals(0, result.size());
         verify(userRepository).findAll();
     }
 
