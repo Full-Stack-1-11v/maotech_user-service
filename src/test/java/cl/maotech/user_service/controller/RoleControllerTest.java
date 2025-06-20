@@ -95,7 +95,6 @@ public class RoleControllerTest {
     @Test
     void testListRolesNotFound() throws Exception {
         // Given
-        List<Role> roles = List.of();
         // When
         Mockito.when(roleService.findAll()).thenThrow(new RuntimeException("Roles not found"));
         // Then
