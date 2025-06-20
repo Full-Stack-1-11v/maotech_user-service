@@ -241,6 +241,35 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testUpdateFromDtoNullDto(){
+        // Given
+        UserEditDTO userEditDTO = null;
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateFromDto(userEditDTO, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("password123", updatedUser.getPassword());
+        assertEquals("11.111.111-1", updatedUser.getRut());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(true, updatedUser.getStatus());
+        assertEquals(null, updatedUser.getRole());
+    }
+
+    @Test
+    public void testUpdateFromDtoNullUser() {
+        // Given
+        UserEditDTO userEditDTO = new UserEditDTO(1, "test@mail.com", "Admin1", "Admin1");
+        User user = null;
+        // When
+        User updatedUser = userService.updateFromDto(userEditDTO, user);
+        // Then
+        assertEquals(null, updatedUser);
+    }
+
+    @Test
     public void testUpdateStatusDto(){
         // Given
         StatusEditDTO statusEditDTO = new StatusEditDTO(false);
@@ -261,19 +290,48 @@ public class UserServiceTest {
     @Test
     public void testUpdateStatusDtoNullValues(){
         // Given
-        StatusEditDTO statusEditDTO = null;
-        User user = new User(null, null, null, null, null, null, null, null);
+        StatusEditDTO statusEditDTO = new StatusEditDTO(null);
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
         // When
         User updatedUser = userService.updateStatusDto(statusEditDTO, user);
         // Then
-        assertEquals(null, updatedUser.getUserId());
-        assertEquals(null, updatedUser.getEmail());
-        assertEquals(null, updatedUser.getPassword());
-        assertEquals(null, updatedUser.getRut());
-        assertEquals(null, updatedUser.getFirstName());
-        assertEquals(null, updatedUser.getLastName());
-        assertEquals(null, updatedUser.getStatus());
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("password123", updatedUser.getPassword());
+        assertEquals("11.111.111-1", updatedUser.getRut());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(true, updatedUser.getStatus());
         assertEquals(null, updatedUser.getRole());
+    }
+
+    @Test
+    public void testUpdateStatusDtoNullStatus(){
+        // Given
+        StatusEditDTO statusEditDTO = null;
+        User user = new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null);
+        // When
+        User updatedUser = userService.updateStatusDto(statusEditDTO, user);
+        // Then
+        assertEquals(1, updatedUser.getUserId());
+        assertEquals("test@mail.com", updatedUser.getEmail());
+        assertEquals("password123", updatedUser.getPassword());
+        assertEquals("11.111.111-1", updatedUser.getRut());
+        assertEquals("Admin1", updatedUser.getFirstName());
+        assertEquals("Admin1", updatedUser.getLastName());
+        assertEquals(true, updatedUser.getStatus());
+        assertEquals(null, updatedUser.getRole());
+    }
+    
+    @Test
+    public void testUpdateStatusDtoNullUser() {
+        // Given
+        StatusEditDTO statusEditDTO = new StatusEditDTO(false);
+        User user = null;
+        // When
+        User updatedUser = userService.updateStatusDto(statusEditDTO, user);
+        // Then
+        assertEquals(null, updatedUser);
     }
     
     @Test
