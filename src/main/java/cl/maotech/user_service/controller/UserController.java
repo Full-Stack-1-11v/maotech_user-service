@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -64,7 +62,7 @@ public class UserController {
                 return ResponseEntity.noContent().build();
             } else {
                 return ResponseEntity.ok(users);
-        }
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -107,7 +105,7 @@ public class UserController {
 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
-        }        
+        }
     }
 
     @PutMapping("/{id}/update")
@@ -120,8 +118,8 @@ public class UserController {
             return ResponseEntity.ok(up_user);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }        
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}/deactivate")
@@ -134,8 +132,8 @@ public class UserController {
             return ResponseEntity.ok(d_user);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }        
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}/role/edit")
@@ -153,8 +151,6 @@ public class UserController {
         }
     }
 
-    
-
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
@@ -164,7 +160,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @GetMapping("/inactives/admin")
     public ResponseEntity<List<User>> findInactives() {
         try {
@@ -192,7 +188,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @DeleteMapping("/inactives/delete")
     public ResponseEntity<?> deleteAllInactives() {
         try {
