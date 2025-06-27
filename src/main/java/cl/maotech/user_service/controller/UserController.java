@@ -140,14 +140,13 @@ public class UserController {
     public ResponseEntity<User> updateRole(@PathVariable Integer id, @RequestBody RoleDTO roleDTO) {
         try {
             User user = userService.findById(id);
-            if (user == null) {
-                return ResponseEntity.notFound().build();
-            }
             User updatedUser = userService.updateRoleDto(roleDTO.getRoleId(), user);
+            
             userService.save(updatedUser);
             return ResponseEntity.ok(updatedUser);
+            
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                return ResponseEntity.notFound().build();
         }
     }
 
