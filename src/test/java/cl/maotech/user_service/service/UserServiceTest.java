@@ -46,7 +46,6 @@ public class UserServiceTest {
     public void testFindAll(){
         // Given
         List<User> users = new ArrayList<>();
-       // users.add(new User(1, "test@mail.com", "password123", "11.111.111-1", "Admin1", "Admin1", true, null));
         // When
         when(userRepository.findAll()).thenReturn(users);
         // Then
