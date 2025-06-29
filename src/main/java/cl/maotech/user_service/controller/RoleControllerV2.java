@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,7 @@ public class RoleControllerV2 {
         logger.debug("[crearRol] Datos del rol: {}", role);
         try {
             Role newRole = roleService.save(role);
-            EntityModel<Role> entityModel = EntityModel.of(newRole);
+            EntityModel<Role> entityModel = assembler.toModel(newRole);
             logger.info("[crearRol] Rol creado exitosamente: {}", newRole);
             logger.debug("[crearRol] Rol creado: {}", entityModel);
             return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
@@ -90,7 +91,7 @@ public class RoleControllerV2 {
             } else {
                 logger.info("[listarRoles] Lista de roles obtenida exitosamente");
                 logger.debug("[listarRoles] Roles: {}", rolesModel);
-                return ResponseEntity.ok(CollectionModel.of(rolesModel));
+                return ResponseEntity.ok(CollectionModel.of(rolesModel, Link.of("/api/v2/roles/list").withSelfRel()));
             }
         } catch (Exception e) {
             logger.error("[listarRoles] Error al obtener la lista de roles: {}", e.getMessage(), e);
