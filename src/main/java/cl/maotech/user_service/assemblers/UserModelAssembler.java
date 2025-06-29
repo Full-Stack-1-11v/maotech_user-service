@@ -48,7 +48,7 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, En
                 .withRel("deleteAllInactives")
                 .withType("DELETE");
 
-		Link loginLink = linkTo(methodOn(UserControllerV2.class).login(null))
+	Link loginLink = linkTo(methodOn(UserControllerV2.class).login(null))
 				.withRel("login")
 				.withType("POST");
 
