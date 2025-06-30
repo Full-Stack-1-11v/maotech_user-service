@@ -10,7 +10,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import cl.maotech.user_service.controller.UserControllerV2;
-import cl.maotech.user_service.dto.UserDTO;
 import cl.maotech.user_service.model.User;
 
 @Component
@@ -48,28 +47,10 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, En
                 .withRel("deleteAllInactives")
                 .withType("DELETE");
 
-	Link loginLink = linkTo(methodOn(UserControllerV2.class).login(null))
+		Link loginLink = linkTo(methodOn(UserControllerV2.class).login(null))
 				.withRel("login")
 				.withType("POST");
 
         return EntityModel.of(user, createLink, selfLink, allLink, deleteLink, updateLink, inactivesLink, deleteAllInactivesLink, loginLink);
     }
-
-	@NonNull
-	public EntityModel<UserDTO> toModel(@NonNull UserDTO userDTO) {
-		
-		Link allLink = linkTo(methodOn(UserControllerV2.class).listAsDto())
-				.withRel("users")
-				.withType("GET");
-		
-		Link selfLink = linkTo(methodOn(UserControllerV2.class).findByUserDTO(userDTO.getUserId()))
-				.withSelfRel()
-				.withType("GET");
-
-		Link inactivesLink = linkTo(methodOn(UserControllerV2.class).findInactivesDto())
-				.withRel("inactives")
-				.withType("GET");
-
-		return EntityModel.of(userDTO, allLink, inactivesLink, selfLink);
-	}
 }

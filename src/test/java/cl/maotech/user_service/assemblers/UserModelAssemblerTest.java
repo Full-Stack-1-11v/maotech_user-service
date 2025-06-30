@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.test.context.ActiveProfiles;
 
-import cl.maotech.user_service.dto.UserDTO;
 import cl.maotech.user_service.model.User;
 
 @SpringBootTest
@@ -32,20 +31,5 @@ public class UserModelAssemblerTest {
                 .anyMatch(inactivesLink -> inactivesLink.getRel().value().equals("inactives"))
                 .anyMatch(deleteAllInactivesLink -> deleteAllInactivesLink.getRel().value().equals("deleteAllInactives"))
                 .anyMatch(loginLink -> loginLink.getRel().value().equals("login"));
-    }
-
-    @Test
-    public void toModelUserDTO() {
-        // Instanciar
-        UserModelAssembler assembler = new UserModelAssembler();
-        UserDTO user = new UserDTO(1, "test@mail.com", "11.111.111-1", "Admin1", "Admin1", true, null);
-        EntityModel<UserDTO> model = assembler.toModel(user);
-        // Verificar que el modelo no sea nulo
-        assert model != null;
-        // Verificar que el modelo contenga los enlaces esperados
-        assertThat(model.getContent()).isEqualTo(user);
-        assertThat(model.getLinks()).anyMatch(selfLink -> selfLink.getRel().value().equals("self"))
-                .anyMatch(allLink -> allLink.getRel().value().equals("users"))
-                .anyMatch(inactivesLink -> inactivesLink.getRel().value().equals("inactives"));
     }
 }
