@@ -94,6 +94,7 @@ public class RoleControllerV2Test {
     @Test
     void testListRolesNoContent() throws Exception {
         // Given
+        // When
         Mockito.when(roleService.findAll()).thenReturn(Collections.emptyList());
         // Then
         mockMvc.perform(get("/api/v2/roles/list"))
@@ -103,6 +104,7 @@ public class RoleControllerV2Test {
     @Test
     void testListRolesNotFound() throws Exception {
         // Given
+        // When
         Mockito.when(roleService.findAll()).thenThrow(new RuntimeException("Not Found"));
         // Then
         mockMvc.perform(get("/api/v2/roles/list"))
@@ -146,6 +148,7 @@ public class RoleControllerV2Test {
     @Test
     void testDeleteRoleNotFound() throws Exception {
         // Given
+        // When
         Mockito.doThrow(new RuntimeException("Not Found")).when(roleService).delete(1);
         // Then
         mockMvc.perform(delete("/api/v2/roles/1/delete"))
