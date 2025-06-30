@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.maotech.user_service.assemblers.UserDtoModelAssembler;
 import cl.maotech.user_service.assemblers.UserModelAssembler;
 import cl.maotech.user_service.dto.RoleDTO;
 import cl.maotech.user_service.dto.StatusEditDTO;
@@ -47,6 +49,9 @@ public class UserControllerV2 {
     @Autowired
     private UserModelAssembler assembler;
 
+    @Autowired
+    private UserDtoModelAssembler userDtoAssembler;
+
     @PostMapping("/create")
     @Operation(summary = "Crear un nuevo usuario", description = "Crea un nuevo usuario en el sistema.")
     @ApiResponses(value = {
@@ -74,7 +79,7 @@ public class UserControllerV2 {
     @Operation(summary = "Listar usuarios", description = "Obtiene una lista de todos los usuarios del sistema.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente", 
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
         @ApiResponse(responseCode = "204", description = "No hay usuarios disponibles"),
         @ApiResponse(responseCode = "404", description = "No se encontraron usuarios")
     })
@@ -84,7 +89,7 @@ public class UserControllerV2 {
         try {
             List<UserDTO> users = userService.getAllAsDto();
             List<EntityModel<UserDTO>> usersModel = users.stream()
-            .map(assembler::toModel)
+            .map(userDtoAssembler::toModel)
             .collect(Collectors.toList());
             if (users.isEmpty()) {
                 logger.info("[listarUsuarios] No hay usuarios disponibles");
@@ -93,12 +98,12 @@ public class UserControllerV2 {
             } else {
                 logger.info("[listarUsuarios] Lista de usuarios obtenida exitosamente");
                 logger.debug("[listarUsuarios] Detalles de los usuarios: {}", usersModel);
-                return ResponseEntity.ok(CollectionModel.of(usersModel));
+                return ResponseEntity.ok(CollectionModel.of(usersModel, Link.of("/api/v2/users/list").withSelfRel()));
             }
         } catch (Exception e) {
             logger.error("[listarUsuarios] Error al obtener la lista de usuarios: {}", e.getMessage(), e);
             logger.debug("[listarUsuarios] Datos del error: {}", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -125,7 +130,7 @@ public class UserControllerV2 {
             } else {
                 logger.info("[listarUsuariosAdmin] Lista de usuarios obtenida exitosamente");
                 logger.debug("[listarUsuariosAdmin] Detalles de los usuarios: {}", usersModel);
-                return ResponseEntity.ok(CollectionModel.of(usersModel));
+                return ResponseEntity.ok(CollectionModel.of(usersModel, Link.of("/api/v2/users/list/admin").withSelfRel()));
             }
         } catch (Exception e) {
             logger.error("[listarUsuariosAdmin] Error al obtener la lista de usuarios: {}", e.getMessage(), e);
@@ -147,7 +152,7 @@ public class UserControllerV2 {
         try {
             User user = userService.findById(id);
             UserDTO userDTO = userService.toDto(user);
-            EntityModel<UserDTO> entityModel = assembler.toModel(userDTO);
+            EntityModel<UserDTO> entityModel = userDtoAssembler.toModel(userDTO);
             logger.info("[obtenerUsuarioPorId] Usuario encontrado: {}", userDTO);
             logger.debug("[obtenerUsuarioPorId] Detalles del usuario: {}", entityModel);
             return ResponseEntity.ok(entityModel);
@@ -204,7 +209,7 @@ public class UserControllerV2 {
             EntityModel<User> entityModel = assembler.toModel(up_user);
             logger.info("[actualizarUsuarioCompleto] Usuario actualizado exitosamente: {}", up_user);
             logger.debug("[actualizarUsuarioCompleto] Detalles del usuario actualizado: {}", entityModel);
-            return ResponseEntity.ok(entityModel);
+            return ResponseEntity.status(HttpStatus.OK).body(entityModel);
 
         } catch (Exception e) {
             logger.error("[actualizarUsuarioCompleto] Error al actualizar el usuario: {}", e.getMessage(), e);
@@ -361,7 +366,7 @@ public class UserControllerV2 {
         try {
             List<UserDTO> inactives = userService.findInactivesDto();
             List<EntityModel<UserDTO>> inactivesModel = inactives.stream()
-            .map(assembler::toModel)
+            .map(userDtoAssembler::toModel)
             .collect(Collectors.toList());
             if (inactives.isEmpty()) {
                 logger.info("[listarUsuariosInactivos] No hay usuarios inactivos disponibles");
